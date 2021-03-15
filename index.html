@@ -69,6 +69,15 @@
   function addTeesee() {
 
     //
+    // Check the validity of the form before going forward.
+    //
+
+    const Form = document.getElementById('form');
+    if (!Form.reportValidity()) {
+      return;
+    }
+
+    //
     // Grab the various values we need.
     //
 
@@ -147,7 +156,13 @@
     // Reset the form.
     //
 
-    document.getElementById('form').reset();
+    Form.reset();
+
+    //
+    // Reset focus.
+    //
+
+    document.getElementById('company').focus();
   }
 
   //
@@ -162,7 +177,7 @@
 
     const Cleaned = Value.replace(/\D/g, '');
     if (Cleaned == '') {
-      return '$';
+      return '';
     }
 
     //
@@ -292,9 +307,6 @@
 
   function main() {
     App = new TeeseeApp_t(getCleanedNumber('years'));
-    // let params = (new URL(document.location)).searchParams;
-    // let name = params.get('name'); // is the string "Jonathan Smith".
-    // let age = parseInt(params.get('age')); // is the number 18
   }
 </script>
 </head>
@@ -307,7 +319,7 @@
   </nav>
 
   <section class='py-5'>
-    <div class='container text-center'>
+    <div class='container text-center' id='header'>
       <h1 class='display-3 my-3'>Visualize and compare compensation packages over time.</h1>
     </div>
   </section>
@@ -315,7 +327,7 @@
   <div class='container-fluid'>
     <div class='row'>
       <div class='col-md col-md-6'>
-        <form id='form' class='row g-2' method='get'>
+        <form id='form' class='row g-2' onsubmit='return false;' novalidate>
           <div class='input-group'>
             <span class='input-group-text bg-dark text-light'>&#128188; Company</span>
             <input type='text' id='company' class='form-control bg-dark text-light' placeholder='Teesee Inc.' required>
@@ -353,8 +365,8 @@
             <input type='range' class='form-range bg-dark text-light' value=5 min=1 max=10 id='years' onload='App.updateYears(this);' onchange='App.updateYears(this);'>
           </div>
 
-          <button class='btn btn-success me-2' type='submit' onclick='addTeesee();'>Model</button>
-          <button class='btn btn-danger me-2' onclick='App.reset();'>Reset</button>
+          <input type='submit' class='btn btn-success me-2' value='Model' onclick='addTeesee();'>
+          <label class='btn btn-danger me-2' onclick='App.reset();'>Reset</label>
         </form>
       </div>
 
