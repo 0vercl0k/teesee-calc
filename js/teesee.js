@@ -191,7 +191,8 @@ class Teesee_t {
 const Colors = [
   {Cash: 'rgb(255, 99, 132)', Stocks: 'rgb(255, 144, 99)', Benefits: 'rgb(255, 221, 99)'},
   {Cash: 'rgb(54, 162, 235)', Stocks: 'rgb(54, 235, 217)', Benefits: 'rgb(99, 211, 255)'},
-  {Cash: 'rgb(128, 0, 128)', Stocks: 'rgb(0, 128, 0)', Benefits: 'rgb(64, 0, 128)'},
+  {Cash: 'rgb(200, 255, 181)', Stocks: 'rgb(181, 200, 255)', Benefits: 'rgb(255, 181, 199)'},
+  {Cash: 'rgb(231, 252, 146)', Stocks: 'rgb(146, 231, 252)', Benefits: 'rgb(231, 252, 146)'},
 ];
 
 class TeeseeApp_t {
@@ -434,8 +435,8 @@ class TeeseeApp_t {
           data: Data,
           barPercentage: 0.5,
           fill: false,
-          backgroundColor: Color(Colors[Idx][Breakdown]).alpha(0.6).rgbString(),
-          borderColor: Colors[Idx][Breakdown],
+          backgroundColor: Colors[Idx % Colors.length][Breakdown],
+          borderColor: Colors[Idx % Colors.length][Breakdown],
           stack: Teesee.Name(),
           fill: false,
           borderWidth: 1
