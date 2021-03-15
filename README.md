@@ -7,16 +7,18 @@
 
 ## Overview
 
-`Teesee` is a simple web application that allows you to visualize and compare total compensation packages over time. Offers can be confusing to understand and compare: multiple parameters, different vesting schedule, different benefits, etc.
+`Teesee` is a simple web application that allows you to visualize and compare total compensation packages. They can be confusing to understand and compare: multiple parameters, different vesting schedule, different benefits, etc.
 
-All offers are ultimately different but they usually all follow a common structure and use the same *ingredients*. `Teesee` breaks down the offer into several part (most of them are not mandatory):
+Ultimately, every package is different but they usually all follow a common structure and use the same *ingredients*. `Teesee` breaks it down into into several parts (note that most of them are not mandatory):
 
-- Base salary: this is cash you receive every month.
-- Benefits: this is your health insurance, 401k match, paid time-off, your free *whatever*. It is not cash but still has a monetary value.
-- Sign-on bonuses: this is a cash amount unlocked over the year (every month for example). Offers can include several of those and it is a way to sweeten an offer.
-- Initial stock grant: this is not a cash amount, but a number of shares that will vest over a period of time. The vesting schedule differs from company to company. Again, this is not a cash amount per se, but has monetary value if you were to sell those shares.
-- Performance cash: this is a cash amount that is usually indexed on both your past year's work and the level you are operating at. It usually happens every year.
+- Base salary: this is a cash amount that you will receive every month.
+- Benefits: this is your health insurance, 401k match, paid time-off, your free *whatever*. It is not cash but still has a monetary value that can vary quite a bit across companies.
+- Sign-on bonuses: this is a fixed cash amount that usually gets unlocked over the year (every month for example, or one payment after signing the contract). Packages can include several of those (for year 2 for example).
+- Initial stock grant: this is not a cash amount, but a number of shares that will vest over a period of time. The vesting schedule differs from company to company.
+- Performance cash: this is a cash amount that is usually indexed on your performance for the past year and also depends on the level you were operating at. It usually happens once every year.
 - Performance stock refresher: this can be another part of the performance rewards. It comes as a stock grant with a vesting schedule that can be different from the initial stock grant. This also usually happens every year.
+
+Hopefully `Teesee` help you out visualize and take better decisions for your own short/long term professional career.
 
 ## References
 
