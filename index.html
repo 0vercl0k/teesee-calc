@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<!-- Axel '0vercl0k' Souchet - March 10 2021 -->
+<html lang='en-US'>
+<head>
+  <title>&#128202; teesee calculator</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name='description' content='Visualize and compare total compensation (TC) offers.'>
+  <meta name='keywords' content='Total compensation, TC, Total comp calculator' />
+  <meta name='twitter:card'  content='summary_large_image' />
+  <meta name='twitter:site'  content='@0vercl0k' />
+  <meta name='twitter:image' content='https://0vercl0k.github/io/teesee-calc/pics/teesee.png' />
+  <link rel='stylesheet' href='./css/bootstrap.min.css'>
+  <style>
+    a { text-decoration: none; }
+  </style>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src='https://www.googletagmanager.com/gtag/js?id=G-N8HQZ0EFSG'></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N8HQZ0EFSG');
+  </script>
+  <script type='text/javascript' src='./js/bootstrap.min.js'></script>
+  <script type='text/javascript' src='./js/teesee.js'></script>
+  <script type='text/javascript' src='./js/Chart.bundle.min.js'></script>
+  <script type='text/javascript' src='./js/chartjs-plugin-datalabels.min.js'></script>
+  <script>
+
+  //
+  // The global app instance.
+  //
+
+  let App = null;
+
+  //
+  // Get the value of an element and convert it to a number.
+  //
+
+  function getCleanedNumber(Id) {
+    return Number(
+      document.getElementById(Id).value.replace(/\D/g, '')
+    );
+  }
+
+  //
+  // Sanitize an array of numbers.
+  //
+
+  function sanitizeNumberArray(Id) {
+    const A = document.getElementById(Id).value.split('/')
+    for (let Idx = 0; Idx < A.length; Idx++) {
+      const Cleaned = A[Idx].replace(/\D/g, '');
+      if (Cleaned == '') {
+        A.length = Idx;
+        break;
+      }
+
+      A[Idx] = Number(Cleaned);
+    }
+
+    return A;
+  }
+
+  //
+  // Create, sanitize a teesee and feed it into the app.
+  //
+
+  function addTeesee() {
+
+    //
+    // Grab the various values we need.
+    //
+
+
+    const Name = document.getElementById('company').value;
+    const Base = getCleanedNumber('base');
+    const Benefits = getCleanedNumber('benefits');
+    const SignOnBonuses = sanitizeNumberArray('signon');
+    const InitialStocks = getCleanedNumber('initial_stocks');
+    const InitialStocksSchedule = sanitizeNumberArray('initial_stocks_schedule');
+    const PerfCash = getCleanedNumber('perf_cash');
+    const PerfStocks = getCleanedNumber('perf_stocks');
+    const PerfStocksSchedule = sanitizeNumberArray('perf_stocks_schedule');
+
+    //
+    // Sanitize the base / benefits / stock grant / perf cash / perf stocks.
+    //
+
+    if (Base < 0) {
+      throw `Base is negative`;
+    }
+
+    if (Benefits < 0) {
+      throw `Benefits is negative`;
+    }
+
+    if (InitialStocks < 0) {
+      throw `Initial stock grant is negative`;
+    }
+
+    if (PerfCash < 0) {
+      throw `PerfCash grant is negative`;
+    }
+
+    if (PerfStocks < 0) {
+      throw `PerfStocks grant is negative`;
+    }
+
+    //
+    // Assign default values for the stock schedules.
+    //
+
+    if (InitialStocksSchedule.length == 0) {
+      InitialStocksSchedule.push(25, 25, 25, 25);
+    }
+
+    if (PerfStocksSchedule.length == 0) {
+      PerfStocksSchedule.push(25, 25, 25, 25);
+    }
+
+    //
+    // Create a teesee.
+    //
+
+    const Teesee = new Teesee_t(
+      Name,
+      Base,
+      Benefits,
+      SignOnBonuses, {
+        Amount: InitialStocks,
+        Schedule: InitialStocksSchedule
+      }, {
+        Cash: PerfCash,
+        Stocks: PerfStocks,
+        Schedule: PerfStocksSchedule
+      }
+    );
+
+    //
+    // Feed it to the App.
+    //
+
+    App.addTeesee(Teesee);
+
+    //
+    // Reset the form.
+    //
+
+    document.getElementById('form').reset();
+  }
+
+  //
+  // Format the currency amount.
+  //
+
+  function formatCurrency(Value) {
+
+    //
+    // Strip any non-digit characters.
+    //
+
+    const Cleaned = Value.replace(/\D/g, '');
+    if (Cleaned == '') {
+      return '$';
+    }
+
+    //
+    // Transform the number back to the current locale.
+    //
+
+    return `$${parseInt(Cleaned, 10).toLocaleString()}`;
+  }
+
+  //
+  // Format the currency amount in the element E.
+  //
+
+  function formatCurrencyElement(E) {
+    E.value = formatCurrency(E.value);
+  }
+
+  //
+  // Format the sign on bonus.
+  //
+
+  function formatSignon(E) {
+
+    //
+    // Break up the value in chunks.
+    //
+
+    const Chunks = E.value.split('/');
+
+    //
+    // Format each chunks into currency.
+    //
+
+    for(let Idx = 0; Idx < Chunks.length; Idx++) {
+
+      //
+      // Clean up the chunk.
+      //
+
+      Chunks[Idx] = Chunks[Idx].replace(/\D/g, '');
+
+      //
+      // Format the currency.
+      //
+
+      Chunks[Idx] = formatCurrency(Chunks[Idx]);
+
+      //
+      // If the chunk is empty, let's stop here; the only chunk
+      // that can be empty is the last one.
+      //
+
+      if (Chunks[Idx] == '$') {
+
+        //
+        // Shrink the array.
+        //
+
+        Chunks.length = Idx + 1;
+        break;
+      }
+    }
+
+    //
+    // Assemble the chunks back together.
+    //
+
+    E.value = Chunks.join(' / ');
+  }
+
+  //
+  // Format the vesting schedule.
+  //
+
+  function formatSchedule(E) {
+
+    //
+    // Break up the value in chunks.
+    //
+
+    const Chunks = E.value.split('/');
+
+    //
+    // Format each chunks.
+    //
+
+    for(let Idx = 0; Idx < Chunks.length; Idx++) {
+
+      //
+      // Clean up the chunk.
+      //
+
+      Chunks[Idx] = Chunks[Idx].replace(/\D/g, '');
+
+      //
+      // If the chunk is empty, let's stop here; the only chunk
+      // that can be empty is the last one.
+      //
+
+      if (Chunks[Idx] == '') {
+
+        //
+        // Shrink the array.
+        //
+
+        Chunks.length = Idx + 1;
+        break;
+      }
+
+      //
+      // Format the percentage.
+      //
+
+      Chunks[Idx] = `${Chunks[Idx]}%`;
+    }
+
+    //
+    // Assemble the chunks back together.
+    //
+
+    E.value = Chunks.join(' / ');
+  }
+
+  //
+  // Main.
+  //
+
+  function main() {
+    App = new TeeseeApp_t(getCleanedNumber('years'));
+    // let params = (new URL(document.location)).searchParams;
+    // let name = params.get('name'); // is the string "Jonathan Smith".
+    // let age = parseInt(params.get('age')); // is the number 18
+  }
+</script>
+</head>
+<body class='bg-dark text-light' onload='main();'>
+  <nav class='navbar navbar-expand-lg navbar-dark'>
+    <div class='container-fluid'>
+      <a class='navbar-brand' href='#'>&#128202; teesee calculator</a>
+      <a href='https://github.com/0vercl0k/teesee-calc'><img src='./pics/GitHub-Mark-Light-32px.png'></img></a>
+    </div>
+  </nav>
+
+  <section class='py-5'>
+    <div class='container text-center'>
+      <h1 class='display-3 my-3'>Visualize and compare compensation packages over time.</h1>
+    </div>
+  </section>
+
+  <div class='container-fluid'>
+    <div class='row'>
+      <div class='col-md col-md-6'>
+        <form id='form' class='row g-2' method='get'>
+          <div class='input-group'>
+            <span class='input-group-text bg-dark text-light'>&#128188; Company</span>
+            <input type='text' id='company' class='form-control bg-dark text-light' placeholder='Teesee Inc.' required>
+            <span class='input-group-text bg-dark text-light'>&#128176; Base</span>
+            <input type='text' id='base' class='form-control bg-dark text-light' placeholder='$100,000' onkeyup='formatCurrencyElement(this);' required>
+          </div>
+
+          <div class='input-group'>
+            <span class='input-group-text bg-dark text-light'>&#127847; Benefits</span>
+            <input type='text' id='benefits' class='form-control bg-dark text-light' placeholder='$10,000' onkeyup='formatCurrencyElement(this);' required>
+            <span class='input-group-text bg-dark text-light'>&#128079; Sign-on bonus (yr1/yr2/..)</span>
+            <input type='text' id='signon' class='form-control bg-dark text-light' placeholder='$1,000 / $1,000' onkeyup='formatSignon(this);'>
+          </div>
+
+          <div class='input-group'>
+            <span class='input-group-text bg-dark text-light'>&#128184; Initial stocks grant</span>
+            <input type='text' id='initial_stocks' class='form-control bg-dark text-light' placeholder='$50,000' onkeyup='formatCurrencyElement(this);'>
+            <span class='input-group-text bg-dark text-light'>&#128336; Schedule</span>
+            <input type='text' id='initial_stocks_schedule' class='form-control bg-dark text-light' placeholder='25% / 25% / 25% / 25%' onkeyup='formatSchedule(this);'>
+          </div>
+
+          <div class='input-group'>
+            <span class='input-group-text bg-dark text-light'>&#128178; Performance (cash/yr)</span>
+            <input type='text' id='perf_cash' class='form-control bg-dark text-light' placeholder='$5,000' onkeyup='formatCurrencyElement(this);'>
+          </div>
+
+          <div class='input-group'>
+            <span class='input-group-text bg-dark text-light'>&#128640; Performance (stocks/yr)</span>
+            <input type='text' id='perf_stocks' class='form-control bg-dark text-light' placeholder='$25,000' onkeyup='formatCurrencyElement(this);'>
+            <span class='input-group-text bg-dark text-light'>&#128348; Schedule</span>
+            <input type='text' id='perf_stocks_schedule' class='form-control bg-dark text-light' placeholder='25% / 25% / 25% / 25%' onkeyup='formatSchedule(this);'>
+          </div>
+
+          <div class='input-group'>
+            <input type='range' class='form-range bg-dark text-light' value=5 min=1 max=10 id='years' onload='App.updateYears(this);' onchange='App.updateYears(this);'>
+          </div>
+
+          <button class='btn btn-success me-2' type='submit' onclick='addTeesee();'>Model</button>
+          <button class='btn btn-danger me-2' onclick='App.reset();'>Reset</button>
+        </form>
+      </div>
+
+      <div class='col-md col-md-6'>
+        <canvas id='chart'></canvas>
+      </div>
+    </div>
+    <div class='row'>
+    </div>
+  </div>
+
+  <footer class='py-3'>
+    <div class='container'>
+      <div class='d-flex justify-content-center mt-2'>
+        <p class='mb-0 mt-2 small text-muted'>Written with &#127867; by Axel '<a href='https://twitter.com/0vercl0k'>@0vercl0k</a>' Souchet</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
