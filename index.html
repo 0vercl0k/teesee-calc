@@ -63,6 +63,22 @@
   }
 
   //
+  // Verify that a vesting schedule is properly formed.
+  //
+
+  function verifySchedule(Schedule) {
+    const Total = Schedule.reduce((Acc, Value) => {
+      return Acc + Value;
+    });
+
+    if (Total < 99 || Total > 100) {
+      return false;
+    }
+
+    return true;
+  }
+
+  //
   // Create, sanitize a teesee and feed it into the app.
   //
 
@@ -93,7 +109,8 @@
     const PerfStocksSchedule = sanitizeNumberArray('perf_stocks_schedule');
 
     //
-    // Sanitize the base / benefits / stock grant / perf cash / perf stocks.
+    // Sanitize the base / benefits / stock grant,
+    // perf cash / perf stocks.
     //
 
     if (Base < 0) {
@@ -126,6 +143,22 @@
 
     if (PerfStocksSchedule.length == 0) {
       PerfStocksSchedule.push(25, 25, 25, 25);
+    }
+
+    //
+    // Verify the schedules.
+    //
+
+    if (!verifySchedule(InitialStocksSchedule)) {
+      alert('The initial stocks grant schedule should total to 100%');
+      document.getElementById('initial_stocks_schedule').focus();
+      return;
+    }
+
+    if (!verifySchedule(PerfStocksSchedule)) {
+      alert('The performance stocks grant schedule should total to 100%');
+      document.getElementById('perf_stocks_schedule').focus();
+      return;
     }
 
     //
