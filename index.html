@@ -326,51 +326,113 @@
 
   <div class='container-fluid'>
     <div class='row'>
-      <div class='col-md col-md-6'>
+      <div class='col-md-6'>
         <form id='form' class='row g-2' onsubmit='return false;' novalidate>
           <div class='input-group'>
-            <span class='input-group-text bg-dark text-light'>&#128188; Company</span>
+            <span data-bs-toggle='collapse' data-bs-target='#collapseCompany' aria-expanded='false' aria-controls='collapseCompany' class='input-group-text bg-dark text-light'>&#128188; Company</span>
             <input type='text' id='company' class='form-control bg-dark text-light' placeholder='Teesee Inc.' required>
-            <span class='input-group-text bg-dark text-light'>&#128176; Base</span>
+            <div class='collapse' id='collapseCompany'>
+              <div class='card card-body bg-dark text-light'>
+                This is used as the name of the dataset on the chart.
+              </div>
+            </div>
+          </div>
+
+
+          <div class='input-group'>
+            <span data-bs-toggle='collapse' data-bs-target='#collapseBase' aria-expanded='false' aria-controls='collapseBase' class='input-group-text bg-dark text-light'>&#128176; Base</span>
             <input type='text' id='base' class='form-control bg-dark text-light' placeholder='$100,000' onkeyup='formatCurrencyElement(this);' required>
+            <div class='collapse' id='collapseBase'>
+              <div class='card card-body bg-dark text-light'>
+                This is the amount of cash you receive every year.
+              </div>
+            </div>
           </div>
 
           <div class='input-group'>
-            <span class='input-group-text bg-dark text-light'>&#127847; Benefits</span>
+            <span data-bs-toggle='collapse' data-bs-target='#collapseBenefits' aria-expanded='false' aria-controls='collapseBenefits' class='input-group-text bg-dark text-light'>&#127847; Benefits</span>
             <input type='text' id='benefits' class='form-control bg-dark text-light' placeholder='$10,000' onkeyup='formatCurrencyElement(this);' required>
-            <span class='input-group-text bg-dark text-light'>&#128079; Sign-on bonus (yr1/yr2/..)</span>
+            <div class='collapse' id='collapseBenefits'>
+              <div class='card card-body bg-dark text-light'>
+                This is the yearly monetary value of the benefits provided by the company (401k match, health insurance, etc.).
+                Check-out <a href='https://www.levels.fyi/benefits/'>levels.fyi/benefits</a> for descriptions of what tech companies offer.
+              </div>
+            </div>
+          </div>
+
+          <div class='input-group'>
+            <span data-bs-toggle='collapse' data-bs-target='#collapseSignon' aria-expanded='false' aria-controls='collapseSignon' class='input-group-text bg-dark text-light'>&#128079; Sign-on (yr1/..)</span>
             <input type='text' id='signon' class='form-control bg-dark text-light' placeholder='$1,000 / $1,000' onkeyup='formatSignon(this);'>
+            <div class='collapse' id='collapseSignon'>
+              <div class='card card-body bg-dark text-light'>
+                This is an amount of cash offered for the first year of employment. It usually is unlocked every month or the whole amount is paid with your first paycheck.
+                You can enter sign-on bonuses for subsequent years using the '/' separator.
+              </div>
+            </div>
           </div>
 
           <div class='input-group'>
-            <span class='input-group-text bg-dark text-light'>&#128184; Initial stocks grant</span>
+            <span data-bs-toggle='collapse' data-bs-target='#collapseInitialStocks' aria-expanded='false' aria-controls='collapseInitialStocks' class='input-group-text bg-dark text-light'>&#128184; Initial stocks grant</span>
             <input type='text' id='initial_stocks' class='form-control bg-dark text-light' placeholder='$50,000' onkeyup='formatCurrencyElement(this);'>
-            <span class='input-group-text bg-dark text-light'>&#128336; Schedule</span>
+            <div class='collapse' id='collapseInitialStocks'>
+              <div class='card card-body bg-dark text-light'>
+                This is the value of the amount of stocks offered by the company.
+              </div>
+            </div>
+          </div>
+
+          <div class='input-group'>
+            <span data-bs-toggle='collapse' data-bs-target='#collapseInitialStocksSchedule' aria-expanded='false' aria-controls='collapseIniti#collapseInitialStocksSchedule' class='input-group-text bg-dark text-light'>&#128336; Schedule</span>
             <input type='text' id='initial_stocks_schedule' class='form-control bg-dark text-light' placeholder='25% / 25% / 25% / 25%' onkeyup='formatSchedule(this);'>
+            <div class='collapse' id='collapseInitialStocksSchedule'>
+              <div class='card card-body bg-dark text-light'>
+                This is the vesting schedule of the initial stock grant. The regular vesting schedule is 25% over 4 years. It means that in year 4, the total number of stocks awarded is now yours.
+              </div>
+            </div>
           </div>
 
           <div class='input-group'>
-            <span class='input-group-text bg-dark text-light'>&#128178; Performance (cash/yr)</span>
+            <span data-bs-toggle='collapse' data-bs-target='#collapsePerfCash' aria-expanded='false' aria-controls='collapsePerfCash' class='input-group-text bg-dark text-light'>&#128178; Performance (cash/yr)</span>
             <input type='text' id='perf_cash' class='form-control bg-dark text-light' placeholder='$5,000' onkeyup='formatCurrencyElement(this);'>
+            <div class='collapse' id='collapsePerfCash'>
+              <div class='card card-body bg-dark text-light'>
+                This is the amount of cash you receive every year as part of your performance review.
+              </div>
+            </div>
           </div>
 
           <div class='input-group'>
-            <span class='input-group-text bg-dark text-light'>&#128640; Performance (stocks/yr)</span>
+            <span data-bs-toggle='collapse' data-bs-target='#collapsePerfStocks' aria-expanded='false' aria-controls='collapsePer#collapsePerfStocks' class='input-group-text bg-dark text-light'>&#128640; Performance (stocks/yr)</span>
             <input type='text' id='perf_stocks' class='form-control bg-dark text-light' placeholder='$25,000' onkeyup='formatCurrencyElement(this);'>
-            <span class='input-group-text bg-dark text-light'>&#128348; Schedule</span>
+            <div class='collapse' id='collapsePerfStocks'>
+              <div class='card card-body bg-dark text-light'>
+                This is the value of an amount of stocks that the company rewards you with as part of the yearly performance review.
+                It usually is dependent on your past year work as well as the level you were operating at.
+              </div>
+            </div>
+          </div>
+
+          <div class='input-group'>
+            <span data-bs-toggle='collapse' data-bs-target='#collapsePerfStocksSchedule' aria-expanded='false' aria-controls='collapsePerfo#collapsePerfStocksSchedule' class='input-group-text bg-dark text-light'>&#128348; Schedule</span>
             <input type='text' id='perf_stocks_schedule' class='form-control bg-dark text-light' placeholder='25% / 25% / 25% / 25%' onkeyup='formatSchedule(this);'>
+            <div class='collapse' id='collapsePerfStocksSchedule'>
+              <div class='card card-body bg-dark text-light'>
+                This is the vesting schedule of the performance review stock award.
+                The schedule can be different from the initial stock grant's.
+              </div>
+            </div>
           </div>
 
           <div class='input-group'>
             <input type='range' class='form-range bg-dark text-light' value=5 min=1 max=10 id='years' onload='App.updateYears(this);' onchange='App.updateYears(this);'>
           </div>
 
-          <input type='submit' class='btn btn-success me-2' value='Model' onclick='addTeesee();'>
-          <label class='btn btn-danger me-2' onclick='App.reset();'>Reset</label>
+          <input type='submit' class='btn btn-success' value='Model' onclick='addTeesee();'>
+          <label class='btn btn-danger' onclick='App.reset();'>Reset</label>
         </form>
       </div>
 
-      <div class='col-md col-md-6'>
+      <div class='col-md-6'>
         <canvas id='chart'></canvas>
       </div>
     </div>

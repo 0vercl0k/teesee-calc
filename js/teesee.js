@@ -203,6 +203,8 @@ class TeeseeApp_t {
     this.Ctx_ = document.getElementById('chart').getContext('2d');
     this.Labels_ = [];
     this.Opts_ = {
+      maintainAspectRatio: false,
+      responsive: true,
       legend: {
         display: false,
       },
