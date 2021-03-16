@@ -353,18 +353,28 @@ class TeeseeApp_t {
   addTeesee(Teesee) {
 
     //
-    // Do not add a duplicate.
+    // Check if we have alreayd a matching entry.
     //
 
-    if (this.getTeeseeByName(Teesee.Name()) != null) {
-      return;
+    const ExistingIndex = this.Teesees_.findIndex((E) => {
+      return Teesee.Name() == E.Name();
+    });
+
+    if (ExistingIndex != -1) {
+
+      //
+      // If we already have a candidate, then replace it.
+      //
+
+      this.Teesees_[ExistingIndex] = Teesee;
+    } else {
+
+      //
+      // Otherwise, push it down.
+      //
+
+      this.Teesees_.push(Teesee);
     }
-
-    //
-    // Keep track of it.
-    //
-
-    this.Teesees_.push(Teesee);
 
     //
     // Draw.
