@@ -420,7 +420,24 @@ class TeeseeApp_t {
     //
 
     const Datasets = [];
+    const TeeseeVariables = [];
     for(const [Idx, Teesee] of this.Teesees_.entries()) {
+
+      //
+      // Prepare the URL variables for this teesee.
+      //
+
+      const Pairs = [];
+      Pairs.push(['na', Teesee.Name()]);
+      Pairs.push(['ba', Teesee.Base_]);
+      Pairs.push(['be', Teesee.Benefits_]);
+      Pairs.push(['si', Teesee.SignOnBonuses_.join('/')]);
+      Pairs.push(['in', Teesee.Stocks_.Amount]);
+      Pairs.push(['sc', Teesee.Stocks_.Schedule.join('/')]);
+      Pairs.push(['pe', Teesee.Perf_.Cash]);
+      Pairs.push(['ps', Teesee.Perf_.Stocks]);
+      Pairs.push(['pc', Teesee.Perf_.Schedule.join('/')]);
+      TeeseeVariables.push(Pairs);
 
       //
       // For each one of them figure out the breakdown between
@@ -477,6 +494,25 @@ class TeeseeApp_t {
       },
       options: this.Opts_
     });
+
+    //
+    // Prepare the URL.
+    //
+
+    const Url = [];
+    for (const [Idx, Pairs] of TeeseeVariables.entries()) {
+      for (const Pair of Pairs) {
+        const Key = `${Pair[0]}${Idx}`;
+        const Value = encodeURI(Pair[1]);
+        Url.push(`${Key}=${Value}`);
+      }
+    }
+
+    //
+    // Update the URL.
+    //
+
+    window.history.replaceState({}, document.title, `${window.origin}?${Url.join('&')}`);
   }
 
   //
