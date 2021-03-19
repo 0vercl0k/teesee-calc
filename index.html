@@ -354,17 +354,23 @@
   function main() {
 
     //
+    // Capture the URL first.
+    //
+
+    document.getElementById('url').value = window.location.href;
+    const Url = new URL(window.location.href);
+
+    //
     // Instantiate the main app.
     //
 
     App = new TeeseeApp_t(getCleanedNumber('years'));
 
     //
-    // Parse the URL to create teesees if we have some.
+    // Lookup table mapping short var name to the names of the DOM
+    // elements that hold those values.
     //
 
-    document.getElementById('url').value = window.location.href;
-    const Url = new URL(window.location.href);
     const Lookup = new Map([
       ['na', 'company'],
       ['ba', 'base'],
@@ -376,10 +382,18 @@
       ['ps', 'perf_stocks'],
       ['pc', 'perf_stocks_schedule'],
     ]);
-    const Currencies = ['base', 'benefits', 'initial_stocks', 'perf_stocks'];
 
     //
-    // Let's go!
+    // All the different fields holding currency values.
+    //
+
+    const Currencies = [
+      'base', 'benefits', 'initial_stocks',
+      'perf_cash', 'perf_stocks'
+    ];
+
+    //
+    // Parse the URL to create teesees if we have some.
     //
 
     let Cur = 0;
@@ -542,7 +556,7 @@
 
           <div class='input-group'>
             <span data-bs-toggle='collapse' data-bs-target='#collapsePerfStocksSchedule' aria-expanded='false' aria-controls='collapsePerfo#collapsePerfStocksSchedule' class='input-group-text bg-dark text-light'>&#128348; Schedule</span>
-            <input type='text' id='perf_stocks_schedule' class='form-control form-control-sm bg-dark text-light' placeholder='25% / 25% / 25% / 25%' onkeyup='formatSchedule(this);'>
+            <input type='text' id='perf_stocks_schedule' class='form-control form-control-sm bg-dark text-light' placeholder='25% / 25% / 25% / 25%' onkeyup='formatScheduleElement(this);'>
             <div class='collapse' id='collapsePerfStocksSchedule'>
               <div class='card card-body bg-dark text-light'>
                 This is the vesting schedule of the performance review stock award.
