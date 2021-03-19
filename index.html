@@ -339,6 +339,15 @@
   }
 
   //
+  // Copy the URL into the clipboard.
+  //
+
+  function copyUrl() {
+    document.getElementById('url').select();
+    document.execCommand('copy');
+  }
+
+  //
   // Main.
   //
 
@@ -354,6 +363,7 @@
     // Parse the URL to create teesees if we have some.
     //
 
+    document.getElementById('url').value = window.location.href;
     const Url = new URL(window.location.href);
     const Lookup = new Map([
       ['na', 'company'],
@@ -547,6 +557,10 @@
 
           <input type='submit' class='btn btn-success' value='Model' onclick='addTeesee();'>
           <label class='btn btn-danger' onclick='App.reset();'>Reset</label>
+          <div class='input-group'>
+            <input id='url' type='text' class='form-control form-control-sm bg-dark text-light' value='foo'>
+            <label class='btn btn-light' onclick='copyUrl()'>Copy URL</label>
+          </div>
         </form>
       </div>
 

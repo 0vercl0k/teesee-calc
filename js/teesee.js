@@ -512,7 +512,9 @@ class TeeseeApp_t {
     // Update the URL.
     //
 
-    window.history.replaceState({}, document.title, `${window.origin}?${Url.join('&')}`);
+    const NewUrl = `${window.origin}?${Url.join('&')}`;
+    window.history.replaceState({}, document.title, NewUrl);
+    document.getElementById('url').value = NewUrl;
   }
 
   //
